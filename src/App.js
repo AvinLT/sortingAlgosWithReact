@@ -6,7 +6,6 @@ function App() {
   return (
     <div className="App">
       <SortingMain></SortingMain>
-      <h1>check</h1>
     </div>
   );
 }

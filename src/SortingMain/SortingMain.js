@@ -1,4 +1,5 @@
 import React from 'react';
+import './SortingMain.css'
 
 export default class SortingMain extends React.Component{
     constructor(props) {
@@ -16,24 +17,26 @@ export default class SortingMain extends React.Component{
 
     resetArr() {
         const arr = [];
-        for (let i=0; i<10; i++) {
-            arr.push(randIntInInterval(10, 100));
+        for (let i=0; i<60; i++) {
+            arr.push(randIntInInterval(10, 600));
         }
         this.setState({arr});
     }
-    
+
     render() {
 
         const {arr} = this.state;
 
         return (
-            <>
+            <div className="bar-group">
                 {arr.map((val, idx) => (
-                    <div key={idx}>
-                        {val}
+                    <div 
+                    className="bar" 
+                    key={idx}
+                    style={{height: `${val}px`}}>
                     </div>
                 ))}
-            </>
+            </div>
         );
     }
 }
