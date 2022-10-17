@@ -1,5 +1,6 @@
 import React from 'react';
 import './SortingMain.css'
+import * as SortingAlgos from '../SortingAlgos/SortingAlgos.jsx'
 
 export default class SortingMain extends React.Component{
     constructor(props) {
@@ -23,20 +24,30 @@ export default class SortingMain extends React.Component{
         this.setState({arr});
     }
 
+    bubbleSort() {
+        const sortedArr = SortingAlgos.bubbleSort(this.state.arr);
+        console.log(this.state.arr);
+        console.log(sortedArr);
+    }
+
     render() {
 
         const {arr} = this.state;
 
         return (
-            <div className="bar-group">
-                {arr.map((val, idx) => (
-                    <div 
-                    className="bar" 
-                    key={idx}
-                    style={{height: `${val}px`}}>
-                    </div>
-                ))}
-            </div>
+            <>
+                <div className="bar-group">
+                    {arr.map((val, idx) => (
+                        <div 
+                        className="bar" 
+                        key={idx}
+                        style={{height: `${val}px`}}>
+                        </div>
+                    ))}
+                </div>
+                <button onClick={() => this.resetArr()}> Reset!</button>
+                <button onClick={() => this.bubbleSort()}>Sort!</button>
+            </>
         );
     }
 }
