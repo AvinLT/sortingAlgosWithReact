@@ -1,6 +1,6 @@
 import React from 'react';
 import './SortingMain.css'
-import * as SortingAlgos from '../SortingAlgos/SortingAlgos.jsx'
+import * as SortingAlgos from '../SortingAlgos/SortingAlgos.js'
 
 export default class SortingMain extends React.Component{
     constructor(props) {
@@ -25,9 +25,29 @@ export default class SortingMain extends React.Component{
     }
 
     bubbleSort() {
-        const sortedArr = SortingAlgos.bubbleSort(this.state.arr);
-        console.log(this.state.arr);
-        console.log(sortedArr);
+        const animations = SortingAlgos.getBubbleSortAnimations(this.state.arr);
+        const temp = 0;
+        for (let i = 0; i < animations.length; i++){
+            const arrayBars = document.getElementsByClassName('bar');
+            const colourChange = i % 3 !== 2;
+            if (colourChange){
+                const [barOneId, barTwoId] = animations[i];
+                const barOneStyle = arrayBars[barOneId].style;
+                const barTwoStyle = arrayBars[barTwoId].style;
+                const colour = i % 3 === 0 ? 'green' : 'black';
+                setTimeout(() => {
+                    barOneStyle.backgroundColor = colour;
+                    barTwoStyle.backgroundColor = colour;
+                }, i * 10);
+            }else{
+                setTimeout(() => {
+                    const [barOneId, barTwoId] = animations[i];
+                    temp = this.state.arr[barOneId];
+                    this.state.arr[barOneId] = this.state.arr[barTwoId];
+                    this.state.arr[barTwoId] = temp;
+                  }, i * 10);
+            }
+        }
     }
 
     render() {
