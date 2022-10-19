@@ -25,6 +25,8 @@ function bubbleSort(arr, copyArr, animations){
                 copyArr[i] = copyArr[i+1];
                 copyArr[i+1] = temp;
                 finished = true;
+            }else{
+                animations.push([i, i]);
             }
         }
     }

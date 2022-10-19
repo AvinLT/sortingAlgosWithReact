@@ -18,7 +18,7 @@ export default class SortingMain extends React.Component{
 
     resetArr() {
         const arr = [];
-        for (let i=0; i<60; i++) {
+        for (let i=0; i<15; i++) {
             arr.push(randIntInInterval(10, 600));
         }
         this.setState({arr});
@@ -26,7 +26,6 @@ export default class SortingMain extends React.Component{
 
     bubbleSort() {
         const animations = SortingAlgos.getBubbleSortAnimations(this.state.arr);
-        const temp = 0;
         for (let i = 0; i < animations.length; i++){
             const arrayBars = document.getElementsByClassName('bar');
             const colourChange = i % 3 !== 2;
@@ -34,18 +33,24 @@ export default class SortingMain extends React.Component{
                 const [barOneId, barTwoId] = animations[i];
                 const barOneStyle = arrayBars[barOneId].style;
                 const barTwoStyle = arrayBars[barTwoId].style;
-                const colour = i % 3 === 0 ? 'green' : 'black';
+                const colour = i % 3 === 0 ? 'green' : 'red';
                 setTimeout(() => {
                     barOneStyle.backgroundColor = colour;
                     barTwoStyle.backgroundColor = colour;
-                }, i * 10);
+                }, i * 40);
             }else{
                 setTimeout(() => {
                     const [barOneId, barTwoId] = animations[i];
-                    temp = this.state.arr[barOneId];
+                    const barOneStyle = arrayBars[barOneId].style;
+                    const barTwoStyle = arrayBars[barTwoId].style;
+                    const temp = this.state.arr[barOneId];
+                    const tempHeight = arrayBars[barOneId].style.height;
+
                     this.state.arr[barOneId] = this.state.arr[barTwoId];
+                    barOneStyle.height = arrayBars[barTwoId].style.height;
                     this.state.arr[barTwoId] = temp;
-                  }, i * 10);
+                    barTwoStyle.height = tempHeight;
+                  }, i * 40);
             }
         }
     }
