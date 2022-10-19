@@ -2,6 +2,12 @@ import React from 'react';
 import './SortingMain.css'
 import * as SortingAlgos from '../SortingAlgos/SortingAlgos.js'
 
+const NUMBER_BARS = 50;
+const SPEED = 15;
+
+
+
+
 export default class SortingMain extends React.Component{
     constructor(props) {
         super(props);
@@ -18,7 +24,7 @@ export default class SortingMain extends React.Component{
 
     resetArr() {
         const arr = [];
-        for (let i=0; i<15; i++) {
+        for (let i=0; i<NUMBER_BARS; i++) {
             arr.push(randIntInInterval(10, 600));
         }
         this.setState({arr});
@@ -37,7 +43,7 @@ export default class SortingMain extends React.Component{
                 setTimeout(() => {
                     barOneStyle.backgroundColor = colour;
                     barTwoStyle.backgroundColor = colour;
-                }, i * 40);
+                }, i * SPEED);
             }else{
                 setTimeout(() => {
                     const [barOneId, barTwoId] = animations[i];
@@ -50,9 +56,42 @@ export default class SortingMain extends React.Component{
                     barOneStyle.height = arrayBars[barTwoId].style.height;
                     this.state.arr[barTwoId] = temp;
                     barTwoStyle.height = tempHeight;
-                  }, i * 40);
+                  }, i * SPEED);
             }
         }
+    }
+
+
+    insertionSort() {
+        const animations = SortingAlgos.getinsertionSortAnimations(this.state.arr);
+        for (let i = 0; i < animations.length; i++){
+            const arrayBars = document.getElementsByClassName('bar');
+            const [barOneId, barTwoId, colourChange] = animations[i];
+
+            if (colourChange == 0 || colourChange == 1){
+                const barOneStyle = arrayBars[barOneId].style;
+                const barTwoStyle = arrayBars[barTwoId].style;
+                const colour = colourChange === 0 ? 'green' : 'red';
+                setTimeout(() => {
+                    barOneStyle.backgroundColor = colour;
+                    barTwoStyle.backgroundColor = colour;
+                }, i * SPEED);
+            }else{
+                setTimeout(() => {
+                    const [barOneId, barTwoId, colourchange] = animations[i];
+                    const barOneStyle = arrayBars[barOneId].style;
+                    const barTwoStyle = arrayBars[barTwoId].style;
+                    const temp = this.state.arr[barOneId];
+                    const tempHeight = arrayBars[barOneId].style.height;
+
+                    this.state.arr[barOneId] = this.state.arr[barTwoId];
+                    barOneStyle.height = arrayBars[barTwoId].style.height;
+                    this.state.arr[barTwoId] = temp;
+                    barTwoStyle.height = tempHeight;
+                  }, i * SPEED);
+            }
+        }
+        const wait = 0;
     }
 
     render() {
@@ -71,7 +110,8 @@ export default class SortingMain extends React.Component{
                     ))}
                 </div>
                 <button onClick={() => this.resetArr()}> Reset!</button>
-                <button onClick={() => this.bubbleSort()}>Sort!</button>
+                <button onClick={() => this.bubbleSort()}>BubbleSort!</button>
+                <button onClick={() => this.insertionSort()}>InsertionSort!</button>
             </>
         );
     }
