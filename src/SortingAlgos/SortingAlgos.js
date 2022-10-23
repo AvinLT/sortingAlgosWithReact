@@ -7,7 +7,7 @@ export function getBubbleSortAnimations(arr) {
 
 }
 
-export function getinsertionSortAnimations(arr) {
+export function getInsertionSortAnimations(arr) {
     const animations = [];
     if (arr.length <= 1) return arr;
     const copyArr = arr.slice();
@@ -15,6 +15,25 @@ export function getinsertionSortAnimations(arr) {
     return animations;
 
 }
+
+export function getSelectionSortAnimations(arr) {
+    const animations = [];
+    if (arr.length <= 1) return arr;
+    const copyArr = arr.slice();
+    selectionSort(arr, copyArr, animations);
+    return animations;
+
+}
+
+/*
+export function getQuickAnimations(arr) {
+    const animations = [];
+    if (arr.length <= 1) return arr;
+    const copyArr = arr.slice();
+    quickSort(arr, copyArr, animations);
+    return animations;
+
+}*/
 
 function bubbleSort(arr, copyArr, animations){
     let finished = true;
@@ -67,4 +86,48 @@ function insertionSort(arr, copyArr, animations) {
     return copyArr;
 }
 
+function selectionSort(arr, copyArr, animations) { 
+    let n = copyArr.length;
+        
+    for(let i = 0; i < n; i++) {
+        // Finding the smallest number in the subarray
+        let min = i;
+        for(let j = i+1; j < n; j++){
+            animations.push([j, min, 0]);
+            animations.push([j, min, 1]);
+            if(copyArr[j] < copyArr[min]) {
+                min=j; 
+            }
+        }
+         if (min != i) {
+             // Swapping the elements
+             animations.push([i, min, -1]);
+             let tmp = copyArr[i]; 
+             copyArr[i] = copyArr[min];
+             copyArr[min] = tmp;      
+        }
+    }
+    return copyArr;
+}
+
+/*
+function quicksort(arr, copyArr, animations) {
+    if (copyArr.length <= 1) {
+      return copyArr;
+    }
+  
+    var pivot = copyArr[0];
+    
+    var left = []; 
+    var right = [];
+  
+    for (var i = 1; i < copyArr.length; i++) {
+        animations.push([j, min, 0]);
+        animations.push([j, min, 1]);
+        copyArr[i] < pivot ? left.push(copyArr[i]) : right.push(copyArr[i]);
+    }
+  
+    return quicksort(left).concat(pivot, quicksort(right));
+  };
+*/
 
