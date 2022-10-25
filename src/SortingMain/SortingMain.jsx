@@ -127,6 +127,16 @@ export default class SortingMain extends React.Component{
         const wait = 0;
     }
 
+    /*quickSort() {
+        const out = SortingAlgos.getQuickAnimations(this.state.arr)
+        console.log(out);
+    }*/
+
+    margeSort() {
+        const out = SortingAlgos.getMergeAnimations(this.state.arr)
+        console.log(out);
+    }
+
     render() {
 
         const {arr} = this.state;
@@ -146,6 +156,7 @@ export default class SortingMain extends React.Component{
                 <button onClick={() => this.bubbleSort()}>BubbleSort!</button>
                 <button onClick={() => this.insertionSort()}>InsertionSort!</button>
                 <button onClick={() => this.selectionSort()}>SelectionSort!</button>
+                <button onClick={() => this.margeSort()}>MergeSort!</button>
 
             </>
         );

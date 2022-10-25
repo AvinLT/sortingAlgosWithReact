@@ -30,10 +30,21 @@ export function getQuickAnimations(arr) {
     const animations = [];
     if (arr.length <= 1) return arr;
     const copyArr = arr.slice();
-    quickSort(arr, copyArr, animations);
-    return animations;
+    return quickSort(copyArr);
+    //return animations;
 
-}*/
+}
+*/
+
+export function getMergeAnimations(arr) {
+    const animations = [];
+    if (arr.length <= 1) return arr;
+    const copyArr = arr.slice();
+    const out = mergeSort(copyArr, 0, copyArr.length - 1);
+    return out
+    //return animations;
+
+}
 
 function bubbleSort(arr, copyArr, animations){
     let finished = true;
@@ -111,7 +122,8 @@ function selectionSort(arr, copyArr, animations) {
 }
 
 /*
-function quicksort(arr, copyArr, animations) {
+function quickSort(copyArr) {
+    console.log("RECURSE");
     if (copyArr.length <= 1) {
       return copyArr;
     }
@@ -122,12 +134,44 @@ function quicksort(arr, copyArr, animations) {
     var right = [];
   
     for (var i = 1; i < copyArr.length; i++) {
-        animations.push([j, min, 0]);
-        animations.push([j, min, 1]);
         copyArr[i] < pivot ? left.push(copyArr[i]) : right.push(copyArr[i]);
     }
   
-    return quicksort(left).concat(pivot, quicksort(right));
+    return quickSort(left).concat(pivot, quickSort(right));quickSort
   };
 */
+
+/*
+2 1 4 3
+
+*/
+
+
+
+function merge(left, right) {
+    
+    console.log("BEFORE: ",left, right);
+    let arr = [];
+    while (left[0].length && right[0].length) {
+        if (left[0][0] < right[0][0]) {
+            arr.push(left[0].shift())  
+        } else {
+            arr.push(right[0].shift()) 
+        }
+    }
+
+    console.log("AFTER: ",arr, left[0], right[0]);
+    return arr.concat(left[0]).concat(right[0])
+}
+
+function mergeSort(copyArr, startId, endId) {
+    const half = Math.floor( copyArr.length / 2);
+        if(copyArr.length < 2){
+      return [copyArr, startId]
+    }
+    
+    const left = copyArr.splice(0, half)
+    return merge(mergeSort(left,startId, startId + half - 1),mergeSort(copyArr, startId + half, endId))
+}
+
 
