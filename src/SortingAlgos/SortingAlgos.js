@@ -2,76 +2,62 @@ export function getBubbleSortAnimations(arr) {
     const animations = [];
     if (arr.length <= 1) return arr;
     const copyArr = arr.slice();
-    bubbleSort(arr, copyArr, animations);
+    bubbleSort(copyArr, animations);
     return animations;
-
 }
 
 export function getInsertionSortAnimations(arr) {
     const animations = [];
     if (arr.length <= 1) return arr;
     const copyArr = arr.slice();
-    insertionSort(arr, copyArr, animations);
+    insertionSort(copyArr, animations);
     return animations;
-
 }
 
 export function getSelectionSortAnimations(arr) {
     const animations = [];
     if (arr.length <= 1) return arr;
     const copyArr = arr.slice();
-    selectionSort(arr, copyArr, animations);
+    selectionSort(copyArr, animations);
     return animations;
-
 }
 
-/*
-export function getQuickAnimations(arr) {
+export function getMergeSortAnimations(arr) {
     const animations = [];
     if (arr.length <= 1) return arr;
     const copyArr = arr.slice();
-    return quickSort(copyArr);
-    //return animations;
-
-}
-*/
-
-export function getMergeAnimations(arr) {
-    const animations = [];
-    if (arr.length <= 1) return arr;
-    const copyArr = arr.slice();
-    const out = mergeSort(copyArr, 0, copyArr.length - 1);
-    return out
-    //return animations;
-
+    mergeSortHelper(arr, 0, arr.length - 1, copyArr, animations);
+    return animations;
 }
 
-function bubbleSort(arr, copyArr, animations){
+
+function bubbleSort(copyArr, animations){
     let finished = true;
     let temp;
 
-
-    console.log("HAPPENING")
     while (finished){
         finished = false;
 
         for (let i=0;i<copyArr.length-1;i++){
-            animations.push([i, i+1]);
-            animations.push([i, i+1]);
+            animations.push([i, i+1]); // push ids of bars to turn green
+            animations.push([i, i+1]); // push ids of bars to turn back red
             if (copyArr[i] > copyArr[i+1]){
-                animations.push([i, i+1]);
+                animations.push([i, i+1]); // push ids of bars to swap
+                // swap elements in array based on bubble sort
                 temp = copyArr[i];
                 copyArr[i] = copyArr[i+1];
                 copyArr[i+1] = temp;
                 finished = true;
             }else{
+                //filler array to push to animation to maintain order,
+                //since we need to push in 3s. This swaps an element with itself
                 animations.push([i, i]);
             }
         }
     }
 }
 
-function insertionSort(arr, copyArr, animations) {
+function insertionSort(copyArr, animations) {
     let n = copyArr.length;
     let lock = true;
         for (let i = 1; i < n; i++) {
@@ -97,7 +83,7 @@ function insertionSort(arr, copyArr, animations) {
     return copyArr;
 }
 
-function selectionSort(arr, copyArr, animations) { 
+function selectionSort(copyArr, animations) { 
     let n = copyArr.length;
         
     for(let i = 0; i < n; i++) {
@@ -110,7 +96,7 @@ function selectionSort(arr, copyArr, animations) {
                 min=j; 
             }
         }
-         if (min != i) {
+        if (min != i) {
              // Swapping the elements
              animations.push([i, min, -1]);
              let tmp = copyArr[i]; 
@@ -121,57 +107,70 @@ function selectionSort(arr, copyArr, animations) {
     return copyArr;
 }
 
-/*
-function quickSort(copyArr) {
-    console.log("RECURSE");
-    if (copyArr.length <= 1) {
-      return copyArr;
-    }
-  
-    var pivot = copyArr[0];
-    
-    var left = []; 
-    var right = [];
-  
-    for (var i = 1; i < copyArr.length; i++) {
-        copyArr[i] < pivot ? left.push(copyArr[i]) : right.push(copyArr[i]);
-    }
-  
-    return quickSort(left).concat(pivot, quickSort(right));quickSort
-  };
-*/
+function mergeSortHelper(
+    arr,
+    startIdx,
+    endIdx,
+    copyArr,
+    animations){
+    if (startIdx === endIdx) return;
+    const middleIdx = Math.floor((startIdx + endIdx) / 2);
+    mergeSortHelper(copyArr, startIdx, middleIdx, arr, animations);
+    mergeSortHelper(copyArr, middleIdx + 1, endIdx, arr, animations);
+    doMerge(arr, startIdx, middleIdx, endIdx, copyArr, animations);
+}
 
-/*
-2 1 4 3
-
-*/
-
-
-
-function merge(left, right) {
-    
-    console.log("BEFORE: ",left, right);
-    let arr = [];
-    while (left[0].length && right[0].length) {
-        if (left[0][0] < right[0][0]) {
-            arr.push(left[0].shift())  
+function doMerge(
+    arr,
+    startIdx,
+    middleIdx,
+    endIdx,
+    copyArr,
+    animations) {
+    let k = startIdx;
+    let i = startIdx;
+    let j = middleIdx + 1;
+    while (i <= middleIdx && j <= endIdx) {
+        // These are the values that we're comparing; we push them once
+        // to change their color.
+        animations.push([i, j]);
+        // These are the values that we're comparing; we push them a second
+        // time to revert their color.
+        animations.push([i, j]);
+        if (copyArr[i] <= copyArr[j]) {
+            // We overwrite the value at index k in the original array with the
+            // value at index i in the auxiliary array.
+            animations.push([k, copyArr[i]]);
+            arr[k++] = copyArr[i++];
         } else {
-            arr.push(right[0].shift()) 
+            // We overwrite the value at index k in the original array with the
+            // value at index j in the auxiliary array.
+            animations.push([k, copyArr[j]]);
+            arr[k++] = copyArr[j++];
         }
     }
-
-    console.log("AFTER: ",arr, left[0], right[0]);
-    return arr.concat(left[0]).concat(right[0])
-}
-
-function mergeSort(copyArr, startId, endId) {
-    const half = Math.floor( copyArr.length / 2);
-        if(copyArr.length < 2){
-      return [copyArr, startId]
+    while (i <= middleIdx) {
+        // These are the values that we're comparing; we push them once
+        // to change their color.
+        animations.push([i, i]);
+        // These are the values that we're comparing; we push them a second
+        // time to revert their color.
+        animations.push([i, i]);
+        // We overwrite the value at index k in the original array with the
+        // value at index i in the auxiliary array.
+        animations.push([k, copyArr[i]]);
+        arr[k++] = copyArr[i++];
     }
-    
-    const left = copyArr.splice(0, half)
-    return merge(mergeSort(left,startId, startId + half - 1),mergeSort(copyArr, startId + half, endId))
+    while (j <= endIdx) {
+        // These are the values that we're comparing; we push them once
+        // to change their color.
+        animations.push([j, j]);
+        // These are the values that we're comparing; we push them a second
+        // time to revert their color.
+        animations.push([j, j]);
+        // We overwrite the value at index k in the original array with the
+        // value at index j in the auxiliary array.
+        animations.push([k, copyArr[j]]);
+        arr[k++] = copyArr[j++];
+    }
 }
-
-
